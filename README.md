@@ -50,7 +50,7 @@ Usage
 
 How to use::
 
-* Filter ``bfos_format_bytes``
+* Filter ``bfos_format_bytes``::
 
     {{ [integer] | bfos_format_bytes }}
 
