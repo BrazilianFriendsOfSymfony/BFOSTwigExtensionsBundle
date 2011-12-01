@@ -4,8 +4,8 @@ The BFOSTwigExtensionsBundle
 This bundle provides the following filters:
 
 * ``bfos_format_bytes``: Format the number in bytes into a human readable format.
-* ``bfos_align_right``: Format a string: right-justification with spaces. Useful using the <pre></pre> tag.
-* ``bfos_align_left``: Format a string: left-justification with spaces. Useful using the <pre></pre> tag.
+* ``bfos_align_right``: Format a string: right-justification with spaces. Useful using the pre html tag.
+* ``bfos_align_left``: Format a string: left-justification with spaces. Useful using the pre html tag.
 
 
 Installation
