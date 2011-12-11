@@ -1,11 +1,15 @@
 The BFOSTwigExtensionsBundle
 ============================
 
-This bundle provides the following filters:
+This bundle provides the following *Twig filters*:
 
 * ``bfos_format_bytes``: Format the number in bytes into a human readable format.
 * ``bfos_align_right``: Format a string: right-justification with spaces. Useful using the pre html tag.
 * ``bfos_align_left``: Format a string: left-justification with spaces. Useful using the pre html tag.
+
+and provides the following *Form types*:
+
+* ``richtextarea``: richtextarea type to allow you use rich text form fields out of the box. Currently uses CkEditor.
 
 
 Installation
