@@ -48,6 +48,12 @@ And this to app/AppKernel.php::
       // ...
     );
 
+Add the following to your config.yml
+
+    twig:
+        form:
+            resources:
+                - 'BFOSTwigExtensionsBundle:Form:resources.html.twig'
 
 Usage
 -----
