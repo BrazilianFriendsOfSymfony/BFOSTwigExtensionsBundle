@@ -22,6 +22,7 @@ class StringExtension extends \Twig_Extension
         return array(
             'bfos_align_right' => new \Twig_Filter_Method($this, 'align_right'),
             'bfos_align_left' => new \Twig_Filter_Method($this, 'align_left'),
+            'bfos_replace' => new \Twig_Filter_Method($this, 'replace'),
         );
     }
 
@@ -45,6 +46,13 @@ class StringExtension extends \Twig_Extension
        return sprintf("%-{$cols}s", $str); // left-justification with spaces
     }
 
+    public function replace($subject, $search, $replace, $count = null){
+        if(is_null($count)){
+            return str_replace($search, $replace, $subject);
+        } else {
+            return str_replace($search, $replace, $subject, $count);
+        }
+    }
 
 }
 
