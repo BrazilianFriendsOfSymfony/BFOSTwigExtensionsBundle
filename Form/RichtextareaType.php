@@ -71,7 +71,7 @@ class RichtextareaType extends AbstractType
      */
     public function getName()
     {
-        return 'richtextarea';
+        return 'bfos_richtextarea';
     }
 
     /**

@@ -9,7 +9,7 @@ This bundle provides the following *Twig filters*:
 
 and provides the following *Form types*:
 
-* ``richtextarea``: richtextarea type to allow you use rich text form fields out of the box. Currently uses CkEditor.
+* ``bfos_richtextarea``: bfos_richtextarea type to allow you use rich text form fields out of the box. Currently uses CkEditor.
 
 
 Installation

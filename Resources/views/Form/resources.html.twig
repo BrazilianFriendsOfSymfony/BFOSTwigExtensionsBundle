@@ -1,31 +1,31 @@
-{% block richtextarea_widget %}
+{% block bfos_richtextarea_widget %}
 {% spaceless %}
 
     <script type="text/javascript" charset="utf-8">
     window.CKEDITOR_BASEPATH = "{{ base_path }}";
     $(function() {
-      if(!window.duocmsCkEditorLoading){
+      if(!window.bfosCkEditorLoading){
 
-          if (!window.duocmsCkEditorLoaded)
+          if (!window.bfosCkEditorLoaded)
           {
-            window.duocmsCkEditorLoading = true;
+            window.bfosCkEditorLoading = true;
             var exists = false;
             $('script').each(function() {
               var src = $(this).attr('src');
               if (src === "{{ script_path }}")
               {
                 exists = true;
-                window.duocmsCkEditorLoaded = true;
+                window.bfosCkEditorLoaded = true;
               }
             });
             if (!exists)
             {
               $.getScript("{{ script_path }}", function() {
-                window.duocmsCkEditorLoaded = true;
-                window.duocmsCkEditorLoading = false;
+                window.bfosCkEditorLoaded = true;
+                window.bfosCkEditorLoading = false;
               });
             } else {
-                window.duocmsCkEditorLoading = false;
+                window.bfosCkEditorLoading = false;
             }
           }
 
@@ -42,21 +42,14 @@ $(function() {
   initializeEditor();
   function initializeEditor()
   {
-    if (window.duocmsCkEditorLoaded)
+    if (window.bfosCkEditorLoaded)
     {
       if (window.CKEDITOR.instances['{{ id }}'])
       {
         delete window.CKEDITOR.instances['{{ id }}'];
       };
       CKEDITOR.replace('{{ id }}', {{ ckeditor_options | raw }} );
-      DUOCMS.log(window.CKEDITOR.instances);
-      // The hidden textarea has no id, we have to go by name
-      var textarea = $('#{{ id }}');
-      textarea.addClass('duocms-needs-update');
-      textarea.bind('duocms.update', function() {
-        var value = window.CKEDITOR.instances['{{ id }}'].getData();
-        textarea.val(value);
-      });
+
       window.CKEDITOR.instances['{{ id }}'].on('instanceReady', function (evt)
       {
         var editor = evt.editor;
@@ -78,4 +71,4 @@ $(function() {
 </script>
 
 {% endspaceless %}
-{% endblock richtextarea_widget %}
+{% endblock bfos_richtextarea_widget %}
