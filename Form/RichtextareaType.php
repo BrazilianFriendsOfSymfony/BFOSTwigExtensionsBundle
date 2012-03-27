@@ -33,6 +33,7 @@ class RichtextareaType extends AbstractType
     {
         $builder->setAttribute('script_path', $options['script_path']);
         $builder->setAttribute('base_path', $options['base_path']);
+        $builder->setAttribute('ckeditor_options', $options['ckeditor_options']);
         parent::buildForm($builder, $options);
     }
 
@@ -50,6 +51,7 @@ class RichtextareaType extends AbstractType
             $event = new \BFOS\TwigExtensionsBundle\Form\Event\FilterTypeEvent($this);
             $this->dispatcher->dispatch(RichtextareaType::CONFIGURE_CKEDITOR, $event);
             $config = $event->getConfiguration();
+            $config = array_merge($config, $form->getAttribute('ckeditor_options'));
             if(isset($config['toolbar']) && is_string($config['toolbar']) && isset($config['toolbars'][$config['toolbar']])){
                 $config['toolbar'] = $config['toolbars'][$config['toolbar']];
                 unset($config['toolbars']);
@@ -82,6 +84,7 @@ class RichtextareaType extends AbstractType
         return array(
             'base_path'           => '/bundles/bfostwigextensions/vendor/ckeditor/3.6.2/',
             'script_path'         => '/bundles/bfostwigextensions/vendor/ckeditor/3.6.2/ckeditor.js',
+            'ckeditor_options'    => array()
         );
     }
 

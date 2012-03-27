@@ -36,6 +36,9 @@ class Configuration implements ConfigurationInterface
                             'Main' => array(
                                 array('Format', 'Bold', 'Italic', 'Blockquote'),
                                 array('NumberedList','BulletedList','-','Link','Unlink','Anchor','-','Table','-','FitWindow','Source')),
+                            'MainExtra' => array(
+                                array('Format', 'FontSize', 'Bold', 'Italic', 'Strike', 'Blockquote', 'TextColor', 'BGColor'),
+                                array('NumberedList','BulletedList','-','Link','Unlink','Anchor','-','Table','-','FitWindow','Source')),
                             'Sidebar' => array(
                                 array('Format', 'Bold', 'Italic', 'Blockquote'),
                                 array('NumberedList','BulletedList','-','Link','Unlink','Anchor'),
@@ -50,9 +53,49 @@ class Configuration implements ConfigurationInterface
                     'height' => '225',
 
                     ))
-                ->prototype('scalar')->end()
+                ->prototype('array')->end()
             ->end();
 
+//        $rootNode->append($this->getCkeditorOptions());
+
         return $treeBuilder;
+    }
+
+    private function getCkeditorOptions(){
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('ckeditor_options');
+
+        $node
+            ->useAttributeAsKey('name')
+            ->prototype('array')
+            ->children()
+            ->end()
+            ->defaultValue(array(
+                'toolbars'=>array(
+                    'Default' => array(
+                        array('Format', 'Bold', 'Italic', 'Blockquote'),
+                        array('NumberedList','BulletedList','-','Link','Unlink','Anchor','-','Table',
+                            '-','FitWindow', 'Source')),
+                    'Main' => array(
+                        array('Format', 'Bold', 'Italic', 'Blockquote'),
+                        array('NumberedList','BulletedList','-','Link','Unlink','Anchor','-','Table','-','FitWindow','Source')),
+                    'Sidebar' => array(
+                        array('Format', 'Bold', 'Italic', 'Blockquote'),
+                        array('NumberedList','BulletedList','-','Link','Unlink','Anchor'),
+                        array('Source')),
+                    'Media' => array(
+                        array('Bold', 'Italic', '-','Link', 'Unlink','Anchor', '-', 'Source'))),
+                'toolbar' => 'Sidebar',
+                'format_tags'=>'p;h3;h4;h5;h6;pre',
+                'skin'=>'kama',
+                'uiColor' => '#e1e1e1',
+                'width' => '100%',
+                'height' => '225',
+
+            ))
+            ->end()
+        ;
+
+        return $node;
     }
 }
