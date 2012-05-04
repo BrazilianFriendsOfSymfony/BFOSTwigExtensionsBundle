@@ -63,7 +63,7 @@ How to use::
 * FCBKComplete widget:
 
 
-    Setup your Type:
+Setup your Type:
 
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -73,7 +73,7 @@ How to use::
     }
 
 
-    Setup your action for auto complete list:
+Setup your action for auto complete list:
 
     /**
      * Auto completer list action.
@@ -94,7 +94,7 @@ How to use::
         return new \Symfony\Component\HttpFoundation\Response(json_encode($arr), 200, array('Content-Type'=> 'application/json'));
     }
 
-    Setup a repository method:
+Setup a repository method:
 
     public function findForAutoComplete($string, $limit = 20){
         if(!$string){
