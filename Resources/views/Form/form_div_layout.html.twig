@@ -72,3 +72,20 @@ $(function() {
 
 {% endspaceless %}
 {% endblock bfos_richtextarea_widget %}
+
+{% block bfos_fcbkcomplete_widget %}
+{% spaceless %}
+
+<select {{ block('widget_attributes') }} multiple="multiple">
+    {% for key,valueo in valueWithLabels %}
+    <option value="{{key}}" selected="selected" class="selected">{{valueo}}</option>
+    {% endfor %}
+</select>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#{{id}}").fcbkcomplete({{fcbkcomplete_options|raw}});
+    });
+</script>
+
+{% endspaceless %}
+{% endblock bfos_fcbkcomplete_widget %}

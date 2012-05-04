@@ -6,59 +6,84 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use BFOS\TwigExtensionsBundle\Form\DataTransformer\EntitiesToArrayAjaxTransformer;
+use BFOS\TwigExtensionsBundle\Form\ChoiceList\EntityAjaxChoiceList;
+//use Symfony\Bridge\Doctrine\Form\EventListener\MergeCollectionListener;
 
 class FCBKcompleteType extends AbstractType
 {
     private $container;
 
+    private $registry;
+
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->registry = $container->get('doctrine');
     }
 
     public function buildForm(FormBuilder $builder, array $options)
     {
-        if(!$options['value_callback'] && !is_callable($options['value_callback'])){
-            throw new \InvalidArgumentException('value_callback option must be set and callable.');
-        }
         if(!$options['url']){
             throw new \InvalidArgumentException('url option must be set.');
         }
 
         $builder
-            ->setAttribute('value_callback', $options['value_callback'])
+            ->setAttribute('choice_list', $options['choice_list'])
             ->setAttribute('url', $options['url'])
             ->setAttribute('fcbkcomplete_options', $options['fcbkcomplete_options'])
         ;
+
+        if($options['multiple']){
+            $builder
+                ->prependClientTransformer(new EntitiesToArrayAjaxTransformer($options['choice_list']));
+        } else {
+
+        }
+
     }
 
     public function buildView(FormView $view, FormInterface $form)
     {
         $fcbkcomplete_options = $form->hasAttribute('fcbkcomplete_options') ? $form->getAttribute('fcbkcomplete_options') : array();
-        /*foreach ($fcbkcomplete_options as $key => $value) {
-            $fcbkcomplete_options[$key] = (string) $value;
-        }*/
 
         $fcbkcomplete_options['json_url'] = $form->getAttribute('url');
-        $view->set('fcbkcomplete_options', json_encode($fcbkcomplete_options));
 
         if($form->getData()){
-            $valuesWithLabels = $form->getAttribute('value_callback') ? call_user_func($form->getAttribute('value_callback'), $form->getData()) : $form->getData();
+            $valuesWithLabels = $form->getAttribute('choice_list')->getChoices($form->getData());
             $view->set('valueWithLabels', $valuesWithLabels);
         } else {
             $view->set('valueWithLabels', array());
+            $fcbkcomplete_options['maxitems'] = 1;
+            $fcbkcomplete_options['maxshownitems'] = 1;
         }
+        $view->set('fcbkcomplete_options', json_encode($fcbkcomplete_options));
     }
-
-
 
     public function getDefaultOptions(array $options)
     {
-        $options['value_callback'] = null;
-        $options['url'] = null;
-        $options['fcbkcomplete_options'] = array();
+        $defaultOptions = array(
+            'em'                   => null,
+            'class'                => null,
+            'property'             => null,
+            'query_builder'        => null,
+            'url'                  => null,
+            'fcbkcomplete_options' => null,
+            'multiple'             => true,
+        );
 
-        return $options;
+        $options = array_replace($defaultOptions, $options);
+
+        if (!isset($options['choice_list'])) {
+            $defaultOptions['choice_list'] = new EntityAjaxChoiceList(
+                $this->registry->getEntityManager($options['em']),
+                $options['class'],
+                $options['property'],
+                $options['query_builder']
+            );
+        }
+
+        return $defaultOptions;
     }
 
 

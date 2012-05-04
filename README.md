@@ -53,12 +53,59 @@ Add the following to your config.yml
     twig:
         form:
             resources:
-                - 'BFOSTwigExtensionsBundle:Form:resources.html.twig'
+                - 'BFOSTwigExtensionsBundle:Form:form_div_layout.html.twig'
 
 Usage
 -----
 
 How to use::
+
+* FCBKComplete widget:
+
+
+    Setup your Type:
+
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+        $url = $this->container->get('router')->generate('users_autocomplete');
+        $builder->add('users', 'bfos_fcbkcomplete',
+            array('class'=>'FOS\UserBundle\Entity\User', 'url'=>$url, 'fcbkcomplete_options'=>array('maxitems'=>40, 'maxshownitems'=>40)));
+    }
+
+
+    Setup your action for auto complete list:
+
+    /**
+     * Auto completer list action.
+     *
+     * @Route("/users/autocomplete", name="users_autocomplete")
+     * @Method("get")
+     */
+    public function usersAutoCompleteAction(){
+        if(!($q = $this->getRequest()->get('tag'))){
+            return new \Symfony\Component\HttpFoundation\Response('');
+        }
+
+        $arr = array();
+        $users = $this->getDoctrine()->getRepository('FOSUserBundle:User')->findForAutoComplete($q);
+        foreach($users as $user){
+            $arr[] = array('key'=> (string) $user->getId(), 'value'=> sprintf('%s (%s)', $user->getUsername(), $user->getEmail())) ;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($arr), 200, array('Content-Type'=> 'application/json'));
+    }
+
+    Setup a repository method:
+
+    public function findForAutoComplete($string, $limit = 20){
+        if(!$string){
+            return array();
+        }
+
+        $qb = $this->createQueryBuilder('u');
+        $query = $qb->where('u.username LIKE :str')->orWhere('u.email LIKE :str')->setParameter('str', "%$string%")->getQuery();
+        return $query->setMaxResults($limit)->getResult();
+    }
+
 
 * Filter ``bfos_format_bytes``::
 
