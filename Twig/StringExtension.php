@@ -26,6 +26,14 @@ class StringExtension extends \Twig_Extension
         );
     }
 
+    public function getFunctions()
+    {
+        return array(
+            'str_starts_with' => new \Twig_Function_Method($this, 'startsWith'),
+            'str_ends_with' => new \Twig_Function_Method($this, 'endsWith'),
+        );
+    }
+
     /**
      * Returns the name of the extension.
      *
@@ -53,6 +61,24 @@ class StringExtension extends \Twig_Extension
             return str_replace($search, $replace, $subject, $count);
         }
     }
+
+    public function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+
+    public function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        $start  = $length * -1; //negative
+        return (substr($haystack, $start) === $needle);
+    }
+
 
 }
 
