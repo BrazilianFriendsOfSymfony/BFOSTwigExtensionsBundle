@@ -22,6 +22,11 @@
             <argument type="service" id="service_container" />
         </service>
 
+        <service id="bfos.form_type.datetimepicker" class="BFOS\TwigExtensionsBundle\Form\Type\DateTimePickerType">
+            <tag name="form.type" alias="bfos_datetime"/>
+            <argument type="service" id="service_container" />
+        </service>
+
     </services>
 
 </container>

@@ -89,3 +89,83 @@ $(function() {
 
 {% endspaceless %}
 {% endblock bfos_fcbkcomplete_widget %}
+
+{% block bfos_datetime_widget %}
+
+<style type="text/css">
+    #{{id}}_day, #{{id}}_month {
+        width: 45px;
+    }
+    #{{id}}_year {
+        width: 70px;
+    }
+</style>
+
+{{ block(widget_block_parent) }}
+
+<script type="text/javascript">
+    {% if widget != 'single_text' %}
+    var {{id}}_selector = '#{{id}}_jquery_control';
+    {% else %}
+    var {{id}}_selector = '#{{id}}';
+    {% endif %}
+
+    jQuery(document).ready(function($){
+        {% if widget != 'single_text' %}
+        $('#{{id}}').append('<input type="hidden" id="{{id}}_jquery_control" size="10" disabled="disabled">');
+        {% endif %}
+        var options = {
+            showOn:     "button",
+            buttonImage: "{{asset('bundles/bfostwigextensions/images/calendar1.png')}}",
+            buttonImageOnly: true
+            {% if widget != 'single_text' %}
+            , beforeShow: wfd_{{id}}_read_linked
+            , onSelect: wfd_{{id}}_update_linked
+            , dateFormat: "yy-mm-dd"
+            {% endif %}
+        };
+        if('{{type}}'=='date'){
+            $({{id}}_selector).datepicker(options);
+        } else if('{{type}}'=='datetime'){
+            $({{id}}_selector).datetimepicker(options);
+        } else if('{{type}}'=='time'){
+            $({{id}}_selector).timepicker(options);
+        }
+        {% if widget != 'single_text' %}
+        wfd_{{id}}_check_linked_days();
+        {% endif %}
+        $({{id}}_selector).datepicker($.datepicker.regional['{{locale}}'.replace('_','-')]);
+    });
+    {% if widget != 'single_text' %}
+    function wfd_{{id}}_read_linked()
+    {
+        jQuery({{id}}_selector).val(jQuery("#{{id}}_year").val() + "-" + jQuery("#{{id}}_month").val() + "-" + jQuery("#{{id}}_day").val());
+
+        return {};
+    }
+
+    function wfd_{{id}}_update_linked(date)
+    {
+        jQuery("#{{id}}_year").val(parseInt(date.substring(0, 4), 10));
+        jQuery("#{{id}}_month").val(parseInt(date.substring(5, 7), 10));
+        jQuery("#{{id}}_day").val(parseInt(date.substring(8), 10));
+
+        wfd_{{id}}_check_linked_days();
+    }
+
+    function wfd_{{id}}_check_linked_days()
+    {
+        var daysInMonth = 32 - new Date(jQuery("#{{id}}_year").val(), jQuery("#{{id}}_month").val() - 1, 32).getDate();
+
+//        jQuery("#%s option").attr("disabled", "");
+//        jQuery("#%s option:gt(" + (%s) +")").attr("disabled", "disabled");
+
+        if (jQuery("#{{id}}_day").val() > daysInMonth)
+        {
+            jQuery("#{{id}}_day").val(daysInMonth);
+        }
+    }
+    {% endif %}
+</script>
+
+{% endblock bfos_datetime_widget %}
