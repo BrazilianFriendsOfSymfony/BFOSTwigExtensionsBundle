@@ -105,7 +105,11 @@ $(function() {
 {{ block('datetime_widget') }}
 {% set _id_suffix = '_date' %}
 {{ block('bfos_date_js') }}
-
+<style type="text/css">
+    #{{id}}_time_hour, #{{id}}_time_minute {
+        width: 45px;
+    }
+</style>
 {% endblock bfos_datetime_widget %}
 
 {% block bfos_date_js %}
