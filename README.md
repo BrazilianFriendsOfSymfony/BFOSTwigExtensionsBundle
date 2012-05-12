@@ -57,6 +57,7 @@ Add the following to your config.yml
 
 Usage
 -----
+(Resources/doc/images/test-form-widgets.png)
 
 How to use::
 
@@ -118,6 +119,8 @@ Setup your Type:
         $builder->add('date', 'bfos_date');
     }
 
+Warning: The widget does not support the option widget set to single_text.
+
 * DateTime Picker widget:
 
 
@@ -128,6 +131,7 @@ Setup your Type:
         $builder->add('date', 'bfos_datetime');
     }
 
+Warning: The widget does not support the option widget set to single_text.
 
 * Filter ``bfos_format_bytes``::
 
