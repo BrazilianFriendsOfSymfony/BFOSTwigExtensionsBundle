@@ -21,7 +21,6 @@ class DateTimePickerType extends AbstractType
     {
 
         $builder
-            ->setAttribute('type', $options['type'])
             ->setAttribute('locale', $options['locale'])
         ;
 
@@ -29,19 +28,13 @@ class DateTimePickerType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form)
     {
-//        $fcbkcomplete_options = $form->hasAttribute('fcbkcomplete_options') ? $form->getAttribute('fcbkcomplete_options') : array();
-
-//        $fcbkcomplete_options['json_url'] = $form->getAttribute('url');
-
-        $view->set('widget_block_parent', $form->getAttribute('type') . '_widget');
-        $view->set('type', $form->getAttribute('type'));
+        $view->set('widget_block_parent', 'date_widget');
         $view->set('locale', $form->getAttribute('locale'));
     }
 
     public function getDefaultOptions(array $options)
     {
         $defaultOptions = array(
-            'type'                 => 'date',
             'timepicker_options' => null,
             'locale' => $this->container->get('session')->getLocale()
         );
@@ -53,7 +46,7 @@ class DateTimePickerType extends AbstractType
 
     public function getParent(array $options)
     {
-        return $options['type'];
+        return 'datetime';
     }
 
 

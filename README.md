@@ -107,6 +107,28 @@ Setup a repository method:
     }
 
 
+
+* Date Picker widget:
+
+
+Setup your Type:
+
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+        $builder->add('date', 'bfos_date');
+    }
+
+* DateTime Picker widget:
+
+
+Setup your Type:
+
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+        $builder->add('date', 'bfos_datetime');
+    }
+
+
 * Filter ``bfos_format_bytes``::
 
     {{ [integer] | bfos_format_bytes }}
