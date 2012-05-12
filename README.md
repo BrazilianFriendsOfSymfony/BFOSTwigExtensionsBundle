@@ -57,7 +57,7 @@ Add the following to your config.yml
 
 Usage
 -----
-![Test Form Widgets Screenshot](Resources/doc/images/test-form-widgets.png)
+[Test Form Widgets Screenshot](Resources/doc/images/test-form-widgets.png)
 
 How to use::
 
