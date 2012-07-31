@@ -2,6 +2,7 @@
 namespace BFOS\TwigExtensionsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
@@ -22,7 +23,7 @@ class FCBKcompleteType extends AbstractType
         $this->registry = $container->get('doctrine');
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if(!$options['url']){
             throw new \InvalidArgumentException('url option must be set.');
@@ -43,7 +44,7 @@ class FCBKcompleteType extends AbstractType
 
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $fcbkcomplete_options = $form->hasAttribute('fcbkcomplete_options') ? $form->getAttribute('fcbkcomplete_options') : array();
 
@@ -51,13 +52,13 @@ class FCBKcompleteType extends AbstractType
 
         if($form->getData()){
             $valuesWithLabels = $form->getAttribute('choice_list')->getChoices($form->getData());
-            $view->set('valueWithLabels', $valuesWithLabels);
+            $view->vars['valueWithLabels'] = $valuesWithLabels;
         } else {
-            $view->set('valueWithLabels', array());
+            $view->vars['valueWithLabels'] = array();
             $fcbkcomplete_options['maxitems'] = 1;
             $fcbkcomplete_options['maxshownitems'] = 1;
         }
-        $view->set('fcbkcomplete_options', json_encode($fcbkcomplete_options));
+        $view->vars['fcbkcomplete_options'] = json_encode($fcbkcomplete_options);
     }
 
     public function getDefaultOptions(array $options)
@@ -87,7 +88,7 @@ class FCBKcompleteType extends AbstractType
     }
 
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'field';
     }

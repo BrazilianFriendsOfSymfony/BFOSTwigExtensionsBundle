@@ -12,6 +12,7 @@
 namespace BFOS\TwigExtensionsBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilder;
@@ -25,11 +26,9 @@ class RichtextareaType extends AbstractType
     public function setEventDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
-        //        if ($dispatcher instanceof TraceableEventDispatcherInterface) {
-        //        }
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->setAttribute('script_path', $options['script_path']);
         $builder->setAttribute('base_path', $options['base_path']);
@@ -40,11 +39,11 @@ class RichtextareaType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('pattern', null);
-        $view->set('base_path', $form->getAttribute('base_path'));
-        $view->set('script_path', $form->getAttribute('script_path'));
+        $view->vars['pattern'] = null;
+        $view->vars['base_path'] = $form->getAttribute('base_path');
+        $view->vars['script_path'] = $form->getAttribute('script_path');
 
         if (!is_null($this->dispatcher)) {
             // create the FilterOrderEvent and dispatch it
@@ -63,7 +62,7 @@ class RichtextareaType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'text';
     }

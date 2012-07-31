@@ -2,6 +2,7 @@
 namespace BFOS\TwigExtensionsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormView;
@@ -17,7 +18,7 @@ class DatePickerType extends AbstractType
         $this->container = $container;
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $builder
@@ -26,10 +27,10 @@ class DatePickerType extends AbstractType
 
     }
 
-    public function buildView(FormView $view, FormInterface $form)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->set('widget_block_parent', 'date_widget');
-        $view->set('locale', $form->getAttribute('locale'));
+        $view->vars['widget_block_parent'] = 'date_widget';
+        $view->vars['locale'] = $form->getAttribute('locale');
     }
 
     public function getDefaultOptions(array $options)
@@ -44,7 +45,7 @@ class DatePickerType extends AbstractType
     }
 
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'date';
     }
