@@ -12,19 +12,40 @@
 namespace BFOS\TwigExtensionsBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Exception\FormException;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use \BFOS\TwigExtensionsBundle\Form\ChoiceList\EntityAjaxChoiceList;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
 {
-    private $choiceList;
+    private $class;
 
-    public function __construct(EntityAjaxChoiceList $choiceList)
+    /**
+     * @var EntityManager $em
+     */
+    private $em;
+
+    /**
+     * @var \Doctrine\Common\Persistence\Mapping\ClassMetadata
+     */
+    private $classMetadata;
+
+    /**
+     * @var EntityRepository
+     */
+    private $repository;
+
+
+    public function __construct($class, $em)
     {
-        $this->choiceList = $choiceList;
+        $this->class = $class;
+        $this->classMetadata = $em->getClassMetadata($class);
+        $this->repository = $em->getRepository($class);
+        $this->em = $em;
     }
 
     /**
@@ -47,7 +68,7 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
         $array = array();
 
         foreach ($collection as $entity) {
-            $value = current($this->choiceList->getIdentifierValues($entity));
+            $value = current($this->getIdentifierValues($entity));
             $array[] = is_numeric($value) ? (int) $value : $value;
         }
 
@@ -65,7 +86,7 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
     {
         $collection = new ArrayCollection();
 
-        if ('' === $keys || null === $keys) {
+        if ('' === $keys || null === $keys || ( is_array($keys) && count($keys)==0 )) {
             return $collection;
         }
 
@@ -76,20 +97,36 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
         $notFound = array();
 
         // optimize this into a SELECT WHERE IN query
-        foreach($this->choiceList->getEntitiesByIds($keys) as $entity){
+        $entities = $this->repository->findById($keys);
+        foreach($entities as $entity){
             $collection->add($entity);
         }
-        /*foreach ($keys as $key) {
-            if ($entity = ) {
-            } else {
-                $notFound[] = $key;
-            }
-        }
-
-        if (count($notFound) > 0) {
-            throw new TransformationFailedException(sprintf('The entities with keys "%s" could not be found', implode('", "', $notFound)));
-        }*/
 
         return $collection;
+    }
+
+
+    /**
+     * Returns the values of the identifier fields of an entity.
+     *
+     * Doctrine must know about this entity, that is, the entity must already
+     * be persisted or added to the identity map before. Otherwise an
+     * exception is thrown.
+     *
+     * @param object $entity The entity for which to get the identifier
+     *
+     * @return array          The identifier values
+     *
+     * @throws FormException  If the entity does not exist in Doctrine's identity map
+     */
+    private function getIdentifierValues($entity)
+    {
+        if (!$this->em->contains($entity)) {
+            throw new FormException('Entities passed to the choice field must be managed');
+        }
+
+        $this->em->initializeObject($entity);
+
+        return $this->classMetadata->getIdentifierValues($entity);
     }
 }

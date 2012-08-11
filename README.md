@@ -61,7 +61,7 @@ Usage
 
 How to use::
 
-* FCBKComplete widget:
+* FCBKComplete Entity widget:
 
 
 Setup your Type:
@@ -69,7 +69,7 @@ Setup your Type:
     public function buildForm(FormBuilder $builder, array $options)
     {
         $url = $this->container->get('router')->generate('users_autocomplete');
-        $builder->add('users', 'bfos_fcbkcomplete',
+        $builder->add('users', 'bfos_fcbkcomplete_entity',
             array('class'=>'FOS\UserBundle\Entity\User', 'url'=>$url, 'fcbkcomplete_options'=>array('maxitems'=>40, 'maxshownitems'=>40)));
     }
 
