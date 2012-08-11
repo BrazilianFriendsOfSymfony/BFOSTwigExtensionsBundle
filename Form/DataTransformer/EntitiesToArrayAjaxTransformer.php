@@ -68,7 +68,8 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
         $array = array();
 
         foreach ($collection as $entity) {
-            $value = current($this->getIdentifierValues($entity));
+            //$value = current($this->getIdentifierValues($entity));
+            $value = $entity->getId();
             $array[] = is_numeric($value) ? (int) $value : $value;
         }
 
