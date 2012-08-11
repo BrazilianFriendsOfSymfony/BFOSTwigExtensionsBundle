@@ -98,7 +98,7 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
         $notFound = array();
 
         // optimize this into a SELECT WHERE IN query
-        $entities = $this->repository->findById($keys);
+        $entities = $this->repository->findBy(array('id'=>$keys));
         foreach($entities as $entity){
             $collection->add($entity);
         }
