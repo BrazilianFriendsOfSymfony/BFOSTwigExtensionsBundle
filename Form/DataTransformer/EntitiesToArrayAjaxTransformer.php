@@ -61,9 +61,9 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
             return array();
         }
 
-        if (!($collection instanceof Collection)) {
+        /*if (!($collection instanceof Collection)) {
             throw new UnexpectedTypeException($collection, 'Doctrine\Common\Collections\Collection');
-        }
+        }*/
 
         $array = array();
 
