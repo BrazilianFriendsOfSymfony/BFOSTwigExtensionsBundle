@@ -100,26 +100,30 @@
     var {{id}}_selector = '#{{id}}';
     {% endif %}
 
-    jQuery(document).ready(function($){
-        {% if widget != 'single_text' %}
-        $('#{{id}}{{_id_suffix}}').append('<input type="hidden" id="{{id}}_jquery_control" size="10" disabled="disabled">');
-        {% endif %}
-        var options = {
-            showOn:     "button",
-            buttonImage: "{{asset('bundles/bfostwigextensions/images/calendar1.png')}}",
-            buttonImageOnly: true
-            {% if widget != 'single_text' %}
-            , beforeShow: wfd_{{id}}_read_linked
-            , onSelect: wfd_{{id}}_update_linked
-            , dateFormat: "yy-mm-dd"
-            {% endif %}
-        };
-        $({{id}}_selector).datepicker(options);
+    require(['jquery', 'jqueryui'], function($){
 
-        {% if widget != 'single_text' %}
-        wfd_{{id}}_check_linked_days();
-        {% endif %}
-        $({{id}}_selector).datepicker($.datepicker.regional['{{locale}}'.replace('_','-')]);
+        jQuery(document).ready(function($){
+            {% if widget != 'single_text' %}
+            $('#{{id}}{{_id_suffix}}').append('<input type="hidden" id="{{id}}_jquery_control" size="10" disabled="disabled">');
+            {% endif %}
+            var options = {
+                showOn:     "button",
+                buttonImage: "{{asset('bundles/bfostwigextensions/images/calendar1.png')}}",
+                buttonImageOnly: true
+                {% if widget != 'single_text' %}
+                , beforeShow: wfd_{{id}}_read_linked
+                , onSelect: wfd_{{id}}_update_linked
+                , dateFormat: "yy-mm-dd"
+                {% endif %}
+            };
+            $({{id}}_selector).datepicker(options);
+
+            {% if widget != 'single_text' %}
+            wfd_{{id}}_check_linked_days();
+            {% endif %}
+            $({{id}}_selector).datepicker($.datepicker.regional['{{locale}}'.replace('_','-')]);
+        });
+
     });
     {% if widget != 'single_text' %}
     function wfd_{{id}}_read_linked()

@@ -37,7 +37,7 @@ class DatePickerType extends AbstractType
     {
         $defaultOptions = array(
             'timepicker_options' => null,
-            'locale' => $this->container->get('session')->getLocale()
+            'locale' => $this->container->get('request')->getLocale()
         );
 
         $options = array_replace($defaultOptions, $options);
