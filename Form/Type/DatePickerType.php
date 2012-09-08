@@ -21,9 +21,7 @@ class DatePickerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder
-            ->setAttribute('locale', $options['locale'])
-        ;
+        $builder->setAttribute('locale', $options['locale']);
 
     }
 
