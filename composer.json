@@ -23,8 +23,8 @@
         "twig/twig": "*",
         "doctrine/doctrine-bundle": "*",
         "swiftmailer/swiftmailer": "*",
-        "symfony/yaml": ">=2.1.*",
-        "symfony/validator": ">=2.1.*"
+        "symfony/yaml": ">=2.1",
+        "symfony/validator": ">=2.1"
     },
     "autoload": {
         "psr-0": { "BFOS\\TwigExtensionsBundle": "" }
