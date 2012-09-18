@@ -17,8 +17,8 @@
             <argument type="service" id="service_container" />
         </service>
 
-        <service id="bfos.form_type.fcbkcomplete" class="BFOS\TwigExtensionsBundle\Form\Type\FCBKcompleteType">
-            <tag name="form.type" alias="bfos_fcbkcomplete"/>
+        <service id="bfos.form_type.fcbkcomplete" class="BFOS\TwigExtensionsBundle\Form\Type\FCBKcompleteEntityType">
+            <tag name="form.type" alias="bfos_fcbkcomplete_entity"/>
             <argument type="service" id="service_container" />
         </service>
 

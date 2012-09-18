@@ -1,79 +1,39 @@
 {% block bfos_richtextarea_widget %}
 {% spaceless %}
 
-    <script type="text/javascript" charset="utf-8">
-    window.CKEDITOR_BASEPATH = "{{ base_path }}";
-    $(function() {
-      if(!window.bfosCkEditorLoading){
-
-          if (!window.bfosCkEditorLoaded)
-          {
-            window.bfosCkEditorLoading = true;
-            var exists = false;
-            $('script').each(function() {
-              var src = $(this).attr('src');
-              if (src === "{{ script_path }}")
-              {
-                exists = true;
-                window.bfosCkEditorLoaded = true;
-              }
-            });
-            if (!exists)
-            {
-              $.getScript("{{ script_path }}", function() {
-                window.bfosCkEditorLoaded = true;
-                window.bfosCkEditorLoading = false;
-              });
-            } else {
-                window.bfosCkEditorLoading = false;
-            }
-          }
-
-      }
-    });
-    </script>
 
 <div class="bfos-richtext-textarea-wrapper">
     <textarea {{ block('widget_attributes') }} class="bfos-richtext-textarea ck">{{ value }}</textarea>
 </div>
 
 <script type="text/javascript" charset="utf-8">
-$(function() {
-  initializeEditor();
-  function initializeEditor()
-  {
-    if (window.bfosCkEditorLoaded)
-    {
-      if (window.CKEDITOR.instances['{{ id }}'])
-      {
-        delete window.CKEDITOR.instances['{{ id }}'];
-      };
-      CKEDITOR.replace('{{ id }}', {{ ckeditor_options | raw }} );
+    require(['jquery','ckeditor'], function($){
 
-      window.CKEDITOR.instances['{{ id }}'].on('instanceReady', function (evt)
-      {
-        var editor = evt.editor;
-        // http://cksource.com/forums/viewtopic.php?p=48574#p48574
-        if (window.CKEDITOR.env.webkit && parseInt(editor.config.width) < 310)
+        if (window.CKEDITOR.instances['{{ id }}'])
         {
-          var iframe = document.getElementById('cke_contents_' + editor.name).firstChild;
-          iframe.style.display = 'none';
-          iframe.style.display = 'block';
-        }
-      });
-    }
-    else
-    {
-      window.setTimeout(initializeEditor, 50);
-    }
-  }
-});
+            delete window.CKEDITOR.instances['{{ id }}'];
+        };
+        CKEDITOR.replace('{{ id }}', {{ ckeditor_options | raw }} );
+
+        window.CKEDITOR.instances['{{ id }}'].on('instanceReady', function (evt)
+        {
+            var editor = evt.editor;
+            // http://cksource.com/forums/viewtopic.php?p=48574#p48574
+            if (window.CKEDITOR.env.webkit && parseInt(editor.config.width) < 310)
+            {
+                var iframe = document.getElementById('cke_contents_' + editor.name).firstChild;
+                iframe.style.display = 'none';
+                iframe.style.display = 'block';
+            }
+        });
+
+    });
 </script>
 
 {% endspaceless %}
 {% endblock bfos_richtextarea_widget %}
 
-{% block bfos_fcbkcomplete_widget %}
+{% block bfos_fcbkcomplete_entity_widget %}
 {% spaceless %}
 
 <select {{ block('widget_attributes') }} multiple="multiple">
@@ -82,13 +42,24 @@ $(function() {
     {% endfor %}
 </select>
 <script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery("#{{id}}").fcbkcomplete({{fcbkcomplete_options|raw}});
+    require(['jquery','fcbkcomplete'], function($){
+
+        jQuery(document).ready(function() {
+            var options = {{fcbkcomplete_options|raw}};
+            if(options.json_url.indexOf('?')==-1){
+                options.json_url += '?';
+            } else {
+                options.json_url += '&';
+            }
+            options.json_url = options.json_url + 'src=' + encodeURIComponent(window.location.href);
+            jQuery("#{{id}}").fcbkcomplete(options);
+        });
+
     });
 </script>
 
 {% endspaceless %}
-{% endblock bfos_fcbkcomplete_widget %}
+{% endblock bfos_fcbkcomplete_entity_widget %}
 
 
 {% block bfos_date_widget %}
@@ -129,26 +100,30 @@ $(function() {
     var {{id}}_selector = '#{{id}}';
     {% endif %}
 
-    jQuery(document).ready(function($){
-        {% if widget != 'single_text' %}
-        $('#{{id}}{{_id_suffix}}').append('<input type="hidden" id="{{id}}_jquery_control" size="10" disabled="disabled">');
-        {% endif %}
-        var options = {
-            showOn:     "button",
-            buttonImage: "{{asset('bundles/bfostwigextensions/images/calendar1.png')}}",
-            buttonImageOnly: true
-            {% if widget != 'single_text' %}
-            , beforeShow: wfd_{{id}}_read_linked
-            , onSelect: wfd_{{id}}_update_linked
-            , dateFormat: "yy-mm-dd"
-            {% endif %}
-        };
-        $({{id}}_selector).datepicker(options);
+    require(['jquery', 'jqueryui'], function($){
 
-        {% if widget != 'single_text' %}
-        wfd_{{id}}_check_linked_days();
-        {% endif %}
-        $({{id}}_selector).datepicker($.datepicker.regional['{{locale}}'.replace('_','-')]);
+        jQuery(document).ready(function($){
+            {% if widget != 'single_text' %}
+            $('#{{id}}{{_id_suffix}}').append('<input type="hidden" id="{{id}}_jquery_control" size="10" disabled="disabled">');
+            {% endif %}
+            var options = {
+                showOn:     "button",
+                buttonImage: "{{asset('bundles/bfostwigextensions/images/calendar1.png')}}",
+                buttonImageOnly: true
+                {% if widget != 'single_text' %}
+                , beforeShow: wfd_{{id}}_read_linked
+                , onSelect: wfd_{{id}}_update_linked
+                , dateFormat: "yy-mm-dd"
+                {% endif %}
+            };
+            $({{id}}_selector).datepicker(options);
+
+            {% if widget != 'single_text' %}
+            wfd_{{id}}_check_linked_days();
+            {% endif %}
+            $({{id}}_selector).datepicker($.datepicker.regional['{{locale}}'.replace('_','-')]);
+        });
+
     });
     {% if widget != 'single_text' %}
     function wfd_{{id}}_read_linked()

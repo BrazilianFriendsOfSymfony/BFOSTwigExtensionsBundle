@@ -21,9 +21,7 @@ class DatePickerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder
-            ->setAttribute('locale', $options['locale'])
-        ;
+        $builder->setAttribute('locale', $options['locale']);
 
     }
 
@@ -37,7 +35,7 @@ class DatePickerType extends AbstractType
     {
         $defaultOptions = array(
             'timepicker_options' => null,
-            'locale' => $this->container->get('session')->getLocale()
+            'locale' => $this->container->get('request')->getLocale()
         );
 
         $options = array_replace($defaultOptions, $options);
