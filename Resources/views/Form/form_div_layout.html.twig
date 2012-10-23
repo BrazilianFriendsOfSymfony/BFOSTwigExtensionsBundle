@@ -36,7 +36,7 @@
 {% block bfos_fcbkcomplete_entity_widget %}
 {% spaceless %}
 
-<select {{ block('widget_attributes') }} multiple="multiple">
+<select {{ block('widget_attributes') }} {% if multiple == true %}multiple="multiple"{% endif %}>
     {% for key,valueo in valueWithLabels %}
     <option value="{{key}}" selected="selected" class="selected">{{valueo}}</option>
     {% endfor %}

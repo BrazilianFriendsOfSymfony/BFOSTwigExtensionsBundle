@@ -2,6 +2,7 @@
 namespace BFOS\TwigExtensionsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use BFOS\TwigExtensionsBundle\Form\DataTransformer\EntityToIdAjaxTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormBuilder;
@@ -33,8 +34,7 @@ class FCBKcompleteEntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addViewTransformer(new EntitiesToArrayAjaxTransformer($options['class'], $this->em));
-
+        $builder->addViewTransformer(new EntitiesToArrayAjaxTransformer($options['class'], $this->em, $options['multiple']));
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
@@ -56,6 +56,8 @@ class FCBKcompleteEntityType extends AbstractType
         }
         $view->vars['fcbkcomplete_options'] = json_encode($fcbkcomplete_options);
 //        $view->vars['full_name'] = $view->vars['full_name'].'[]';
+        $view->vars['multiple'] = $options['multiple'];
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -63,7 +65,7 @@ class FCBKcompleteEntityType extends AbstractType
         $resolver
             ->setRequired(array('url', 'class'))
             ->setOptional(array('fcbkcomplete_options'))
-            ->setDefaults(array('compound' => false));
+            ->setDefaults(array('compound' => false, 'multiple'=>true));
     }
 
 

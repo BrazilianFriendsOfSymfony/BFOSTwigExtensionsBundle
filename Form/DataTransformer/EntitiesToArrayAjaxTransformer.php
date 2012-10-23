@@ -39,13 +39,16 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
      */
     private $repository;
 
+    private $multiple;
 
-    public function __construct($class, $em)
+
+    public function __construct($class, $em, $multiple = true)
     {
         $this->class = $class;
         $this->classMetadata = $em->getClassMetadata($class);
         $this->repository = $em->getRepository($class);
         $this->em = $em;
+        $this->multiple = $multiple;
     }
 
     /**
@@ -61,15 +64,16 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
             return array();
         }
 
-        /*if (!($collection instanceof Collection)) {
-            throw new UnexpectedTypeException($collection, 'Doctrine\Common\Collections\Collection');
-        }*/
-
         $array = array();
 
-        foreach ($collection as $entity) {
-            //$value = current($this->getIdentifierValues($entity));
-            $value = $entity->getId();
+        if($this->multiple){
+            foreach ($collection as $entity) {
+                //$value = current($this->getIdentifierValues($entity));
+                $value = $entity->getId();
+                $array[] = is_numeric($value) ? (int) $value : $value;
+            }
+        } else {
+            $value = $collection->getId();
             $array[] = is_numeric($value) ? (int) $value : $value;
         }
 
@@ -103,7 +107,10 @@ class EntitiesToArrayAjaxTransformer implements DataTransformerInterface
             $collection->add($entity);
         }
 
-        return $collection;
+        if($this->multiple){
+            return $collection;
+        }
+        return $collection->first();
     }
 
 
