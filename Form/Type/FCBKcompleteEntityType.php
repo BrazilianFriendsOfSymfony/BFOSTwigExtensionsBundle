@@ -45,7 +45,7 @@ class FCBKcompleteEntityType extends AbstractType
 
         if($form->getData()){
             $valuesWithLabels = array();
-            if(is_array($form->getData())){
+            if(is_array($form->getData()) || $form->getData() instanceof \IteratorAggregate ){
                 foreach($form->getData() as $value){
                     $valuesWithLabels[$value->getId()] = (string) $value;
                 }
