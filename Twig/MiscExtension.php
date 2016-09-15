@@ -14,6 +14,8 @@ namespace BFOS\TwigExtensionsBundle\Twig;
 
 //use Symfony\Component\Translation\TranslatorInterface;
 
+use Twig_SimpleFunction;
+
 class MiscExtension extends \Twig_Extension
 {
 
@@ -33,7 +35,7 @@ class MiscExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'bfos_format_bytes' => new \Twig_Filter_Method($this, 'format_bytes'),
+            new Twig_SimpleFunction('bfos_format_bytes', [$this, 'format_bytes']),
         );
     }
 

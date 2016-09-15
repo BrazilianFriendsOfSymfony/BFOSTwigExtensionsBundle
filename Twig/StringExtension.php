@@ -12,6 +12,7 @@
 
 namespace BFOS\TwigExtensionsBundle\Twig;
 
+use Twig_SimpleFilter;
 use BFOS\TwigExtensionsBundle\Utils\StringUtils;
 
 class StringExtension extends \Twig_Extension
@@ -22,17 +23,17 @@ class StringExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'bfos_align_right' => new \Twig_Filter_Method($this, 'align_right'),
-            'bfos_align_left' => new \Twig_Filter_Method($this, 'align_left'),
-            'bfos_replace' => new \Twig_Filter_Method($this, 'replace'),
+            new Twig_SimpleFilter('bfos_align_right', [$this, 'align_right']),
+            new Twig_SimpleFilter('bfos_align_left', [$this, 'align_left']),
+            new Twig_SimpleFilter('bfos_replace', [$this, 'replace']),
         );
     }
 
     public function getFunctions()
     {
         return array(
-            'str_starts_with' => new \Twig_Function_Method($this, 'startsWith'),
-            'str_ends_with' => new \Twig_Function_Method($this, 'endsWith'),
+            new Twig_SimpleFunction('str_starts_with', [$this, 'startsWith']),
+            new Twig_SimpleFunction('str_ends_with', [$this, 'endsWith']),
         );
     }
 
@@ -48,12 +49,12 @@ class StringExtension extends \Twig_Extension
 
     public function align_right($str, $cols = 10)
     {
-       return sprintf("%{$cols}s", $str); // right-justification with spaces
+        return sprintf("%{$cols}s", $str); // right-justification with spaces
     }
 
     public function align_left($str, $cols = 10)
     {
-       return sprintf("%-{$cols}s", $str); // left-justification with spaces
+        return sprintf("%-{$cols}s", $str); // left-justification with spaces
     }
 
     public function replace($subject, $search, $replace, $count = null){
@@ -76,4 +77,3 @@ class StringExtension extends \Twig_Extension
 
 
 }
-
