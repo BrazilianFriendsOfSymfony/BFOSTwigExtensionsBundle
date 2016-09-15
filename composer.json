@@ -17,7 +17,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "twig/twig": "~1.12"
     },
     "autoload": {
         "psr-0": { "BFOS\\TwigExtensionsBundle": "" }
