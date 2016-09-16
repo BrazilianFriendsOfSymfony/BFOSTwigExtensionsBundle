@@ -13,6 +13,7 @@
 namespace BFOS\TwigExtensionsBundle\Twig;
 
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 use BFOS\TwigExtensionsBundle\Utils\StringUtils;
 
 class StringExtension extends \Twig_Extension
@@ -74,6 +75,4 @@ class StringExtension extends \Twig_Extension
     {
         return StringUtils::endsWith($haystack, $needle);
     }
-
-
 }
